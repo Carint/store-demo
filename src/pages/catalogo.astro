@@ -57,26 +57,6 @@ const maxPrice = Math.max(...products.map(product => product.price));
 
 	<div class="catalog-content">
 		<aside class="filters-sidebar">
-			<div class="search-section">
-				<h3>Buscar Productos</h3>
-				<div class="search-input-container">
-					<input 
-						type="text" 
-						id="searchInput" 
-						placeholder="Buscar por nombre o categoría..."
-						value={searchQuery}
-						oninput="handleSearch()"
-						class="search-input"
-					/>
-					<button class="search-btn" onclick="performSearch()">
-						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
-							<path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-						</svg>
-					</button>
-				</div>
-			</div>
-			
 			<div class="filters-header">
 				<h3>Filtros</h3>
 				<button class="clear-filters" onclick="clearAllFilters()">Limpiar</button>
@@ -144,8 +124,26 @@ const maxPrice = Math.max(...products.map(product => product.price));
 
 		<main class="products-section">
 			<div class="products-header">
-				<div class="results-info">
-					<p>{filteredProducts.length} productos encontrados</p>
+				<div class="search-and-results">
+					<div class="search-input-container">
+						<input 
+							type="text" 
+							id="searchInput" 
+							placeholder="Buscar por nombre o categoría..."
+							value={searchQuery}
+							oninput="handleSearch()"
+							class="search-input"
+						/>
+						<button class="search-btn" onclick="performSearch()">
+							<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+								<path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+						</button>
+					</div>
+					<div class="results-info">
+						<p>{filteredProducts.length} productos encontrados</p>
+					</div>
 				</div>
 				<div class="sort-options">
 					<select onchange="sortProducts(this.value)">
@@ -434,12 +432,67 @@ const maxPrice = Math.max(...products.map(product => product.price));
 		align-items: center;
 		padding: 1rem 0;
 		border-bottom: 1px solid var(--border-color);
+		gap: 2rem;
+	}
+	
+	.search-and-results {
+		display: flex;
+		align-items: center;
+		gap: 2rem;
+		flex: 1;
+	}
+	
+	.search-input-container {
+		display: flex;
+		align-items: center;
+		background: var(--background-color);
+		border: 1px solid var(--border-color);
+		border-radius: 8px;
+		overflow: hidden;
+		transition: all 0.2s ease;
+		min-width: 300px;
+	}
+	
+	.search-input-container:focus-within {
+		border-color: var(--primary-color);
+		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+	}
+	
+	.search-input {
+		flex: 1;
+		padding: 0.75rem 1rem;
+		border: none;
+		background: transparent;
+		color: var(--text-color);
+		font-size: 0.9rem;
+		outline: none;
+	}
+	
+	.search-input::placeholder {
+		color: var(--text-muted);
+	}
+	
+	.search-btn {
+		padding: 0.75rem 1rem;
+		background: var(--primary-color);
+		color: white;
+		border: none;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	.search-btn:hover {
+		background: var(--primary-hover);
 	}
 	
 	.results-info p {
 		margin: 0;
 		color: var(--text-light);
 		font-size: 0.9rem;
+		white-space: nowrap;
 	}
 	
 	.sort-options select {
@@ -712,6 +765,16 @@ const maxPrice = Math.max(...products.map(product => product.price));
 			flex-direction: column;
 			gap: 1rem;
 			align-items: stretch;
+		}
+		
+		.search-and-results {
+			flex-direction: column;
+			gap: 1rem;
+			align-items: stretch;
+		}
+		
+		.search-input-container {
+			min-width: auto;
 		}
 		
 		.pagination {

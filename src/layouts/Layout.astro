@@ -52,16 +52,20 @@ const { title = "Store Demo" } = Astro.props;
 				<div class="footer-content">
 					<div class="footer-section">
 						<h3>Secciones</h3>
-						<ul>
-							<li><a href="/">Inicio</a></li>
-							<li><a href="/catalogo">Catálogo</a></li>
-							<li><a href="/contacto">Contacto</a></li>
-							<li><a href="/carrito">Carrito</a></li>
-							<li><a href="/ofertas">Ofertas</a></li>
-							<li><a href="/nuevos">Nuevos Productos</a></li>
-							<li><a href="/tallas">Guía de Tallas</a></li>
-							<li><a href="/envios">Envíos</a></li>
-						</ul>
+						<div class="footer-columns">
+							<ul>
+								<li><a href="/">Inicio</a></li>
+								<li><a href="/catalogo">Catálogo</a></li>
+								<li><a href="/contacto">Contacto</a></li>
+								<li><a href="/carrito">Carrito</a></li>
+							</ul>
+							<ul>
+								<li><a href="/ofertas">Ofertas</a></li>
+								<li><a href="/nuevos">Nuevos Productos</a></li>
+								<li><a href="/tallas">Guía de Tallas</a></li>
+								<li><a href="/envios">Envíos</a></li>
+							</ul>
+						</div>
 					</div>
 					<div class="footer-section">
 						<h3>Marcas</h3>
@@ -78,16 +82,20 @@ const { title = "Store Demo" } = Astro.props;
 					</div>
 					<div class="footer-section">
 						<h3>Categorías</h3>
-						<ul>
-							<li><a href="/categoria/camisetas">Camisetas</a></li>
-							<li><a href="/categoria/pantalones">Pantalones</a></li>
-							<li><a href="/categoria/jeans">Jeans</a></li>
-							<li><a href="/categoria/vestidos">Vestidos</a></li>
-							<li><a href="/categoria/chaquetas">Chaquetas</a></li>
-							<li><a href="/categoria/zapatos">Zapatos</a></li>
-							<li><a href="/categoria/accesorios">Accesorios</a></li>
-							<li><a href="/categoria/bolsos">Bolsos</a></li>
-						</ul>
+						<div class="footer-columns">
+							<ul>
+								<li><a href="/categoria/camisetas">Camisetas</a></li>
+								<li><a href="/categoria/pantalones">Pantalones</a></li>
+								<li><a href="/categoria/jeans">Jeans</a></li>
+								<li><a href="/categoria/vestidos">Vestidos</a></li>
+							</ul>
+							<ul>
+								<li><a href="/categoria/chaquetas">Chaquetas</a></li>
+								<li><a href="/categoria/zapatos">Zapatos</a></li>
+								<li><a href="/categoria/accesorios">Accesorios</a></li>
+								<li><a href="/categoria/bolsos">Bolsos</a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 				<div class="footer-bottom">
@@ -329,6 +337,36 @@ const { title = "Store Demo" } = Astro.props;
 		transform: translateX(4px);
 	}
 	
+	.footer-columns {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+	}
+	
+	.footer-columns ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	
+	.footer-columns li {
+		margin-bottom: 0.75rem;
+	}
+	
+	.footer-columns a {
+		text-decoration: none;
+		color: var(--text-light);
+		font-size: 0.9rem;
+		font-weight: 500;
+		transition: all 0.2s ease;
+		display: inline-block;
+	}
+	
+	.footer-columns a:hover {
+		color: var(--text-color);
+		transform: translateX(4px);
+	}
+	
 	.brand-tags {
 		display: flex;
 		flex-wrap: wrap;
@@ -418,6 +456,11 @@ const { title = "Store Demo" } = Astro.props;
 		
 		.footer-section {
 			text-align: center;
+		}
+		
+		.footer-columns {
+			grid-template-columns: 1fr;
+			gap: 0.5rem;
 		}
 		
 		.brand-tags {
