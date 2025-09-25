@@ -153,10 +153,22 @@ El proyecto está optimizado para:
 - 📱 **Tablets** (768px - 1024px)
 - 💻 **Desktop** (1024px+)
 
+### ✅ Página de Producto Individual
+- Detalles completos del producto con imágenes
+- Selección de tallas y colores
+- Sistema de calificaciones y reviews
+- Productos relacionados
+- Botones de acción (agregar al carrito, wishlist)
+- Estados de stock dinámicos
+
+### ✅ Página de Contacto
+- Formulario de contacto funcional
+- Información de la empresa
+- Datos de contacto y ubicación
+- Diseño responsivo y moderno
+
 ## 🚧 Próximas Funcionalidades
 
-- [ ] **Página de producto individual** con detalles completos
-- [ ] **Página de contacto** con formulario funcional
 - [ ] **Funcionalidad del carrito** (agregar/eliminar productos dinámicamente)
 - [ ] **Integración con API** real para productos y usuarios
 - [ ] **Autenticación** de usuarios y perfiles
