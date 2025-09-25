@@ -28,11 +28,13 @@ const { title = "Store Demo" } = Astro.props;
 						<a href="/catalogo" class="nav-link">Catálogo</a>
 						<a href="/contacto" class="nav-link">Contacto</a>
 						<a href="/carrito" class="nav-link cart-link">
-							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path d="M7 4V2C7 1.45 7.45 1 8 1H16C16.55 1 17 1.45 17 2V4H20C20.55 4 21 4.45 21 5S20.55 6 20 6H19V19C19 20.1 18.1 21 17 21H7C5.9 21 5 20.1 5 19V6H4C3.45 6 3 5.55 3 5S3.45 4 4 4H7ZM9 3V4H15V3H9ZM7 6V19H17V6H7Z" fill="currentColor"/>
-								<path d="M9 8V17H11V8H9ZM13 8V17H15V8H13Z" fill="currentColor"/>
-							</svg>
-							Carrito
+							<div class="cart-icon-container">
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path d="M7 18C5.9 18 5.01 18.9 5.01 20S5.9 22 7 22 8.99 21.1 8.99 20 8.1 18 7 18ZM1 2V4H3L6.6 11.59L5.25 14.04C5.09 14.32 5 14.65 5 15C5 16.1 5.9 17 7 17H19V15H7.42C7.28 15 7.17 14.89 7.17 14.75L7.2 14.63L8.1 13H15.55C16.3 13 16.96 12.59 17.3 11.97L20.88 5H5.21L4.27 3H1V2ZM17 18C15.9 18 15.01 18.9 15.01 20S15.9 22 17 22 18.99 21.1 18.99 20 18.1 18 17 18Z" fill="currentColor"/>
+								</svg>
+								<span class="cart-count">3</span>
+							</div>
+							<span class="cart-text">Carrito</span>
 						</a>
 					</nav>
 				</div>
@@ -49,35 +51,47 @@ const { title = "Store Demo" } = Astro.props;
 			<div class="container">
 				<div class="footer-content">
 					<div class="footer-section">
-						<h3>Store</h3>
+						<h3>Secciones</h3>
 						<ul>
-							<li><a href="#">Tops</a></li>
-							<li><a href="#">Designers</a></li>
-							<li><a href="#">Collection</a></li>
-							<li><a href="#">Texture</a></li>
-							<li><a href="#">Sale</a></li>
-							<li><a href="#">Prints</a></li>
-							<li><a href="#">Silk Edition</a></li>
-							<li><a href="#">Brands</a></li>
-							<li><a href="#">Demos</a></li>
-							<li><a href="#">Showroom</a></li>
+							<li><a href="/">Inicio</a></li>
+							<li><a href="/catalogo">Catálogo</a></li>
+							<li><a href="/contacto">Contacto</a></li>
+							<li><a href="/carrito">Carrito</a></li>
+							<li><a href="/ofertas">Ofertas</a></li>
+							<li><a href="/nuevos">Nuevos Productos</a></li>
+							<li><a href="/tallas">Guía de Tallas</a></li>
+							<li><a href="/envios">Envíos</a></li>
 						</ul>
 					</div>
 					<div class="footer-section">
-						<h3>Categories</h3>
+						<h3>Marcas</h3>
+						<div class="brand-tags">
+							<span class="brand-tag">Nike</span>
+							<span class="brand-tag">Adidas</span>
+							<span class="brand-tag">Nautica</span>
+							<span class="brand-tag">Tommy Hilfiger</span>
+							<span class="brand-tag">Levi's</span>
+							<span class="brand-tag">Calvin Klein</span>
+							<span class="brand-tag">Ralph Lauren</span>
+							<span class="brand-tag">Puma</span>
+						</div>
+					</div>
+					<div class="footer-section">
+						<h3>Categorías</h3>
 						<ul>
-							<li><a href="#">Tops</a></li>
-							<li><a href="#">Designers</a></li>
-							<li><a href="#">Collection</a></li>
-							<li><a href="#">Texture</a></li>
-							<li><a href="#">Sale</a></li>
-							<li><a href="#">Prints</a></li>
-							<li><a href="#">Silk Edition</a></li>
-							<li><a href="#">Brands</a></li>
-							<li><a href="#">Demos</a></li>
-							<li><a href="#">Showroom</a></li>
+							<li><a href="/categoria/camisetas">Camisetas</a></li>
+							<li><a href="/categoria/pantalones">Pantalones</a></li>
+							<li><a href="/categoria/jeans">Jeans</a></li>
+							<li><a href="/categoria/vestidos">Vestidos</a></li>
+							<li><a href="/categoria/chaquetas">Chaquetas</a></li>
+							<li><a href="/categoria/zapatos">Zapatos</a></li>
+							<li><a href="/categoria/accesorios">Accesorios</a></li>
+							<li><a href="/categoria/bolsos">Bolsos</a></li>
 						</ul>
 					</div>
+				</div>
+				<div class="footer-bottom">
+					<p>&copy; 2024 Store Demo. Todos los derechos reservados.</p>
 				</div>
 			</div>
 		</footer>
@@ -86,12 +100,16 @@ const { title = "Store Demo" } = Astro.props;
 
 <style>
 	:root {
-		--primary-color: #1e40af;
-		--text-color: #1f2937;
+		--primary-color: #2563eb;
+		--primary-hover: #1d4ed8;
+		--text-color: #111827;
 		--text-light: #6b7280;
+		--text-muted: #9ca3af;
 		--border-color: #e5e7eb;
 		--background-color: #ffffff;
-		--background-light: #f9fafb;
+		--background-light: #f8fafc;
+		--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+		--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 	}
 	
 	* {
@@ -118,7 +136,11 @@ const { title = "Store Demo" } = Astro.props;
 	.header {
 		background-color: var(--background-color);
 		border-bottom: 1px solid var(--border-color);
-		padding: 1rem 0;
+		padding: 1.25rem 0;
+		box-shadow: var(--shadow-sm);
+		position: sticky;
+		top: 0;
+		z-index: 50;
 	}
 	
 	.header-content {
@@ -128,47 +150,130 @@ const { title = "Store Demo" } = Astro.props;
 	}
 	
 	.logo {
-		font-size: 1.5rem;
-		font-weight: 700;
+		font-size: 1.75rem;
+		font-weight: 800;
 		margin: 0;
 		color: var(--text-color);
+		letter-spacing: -0.025em;
 	}
 	
 	.nav {
 		display: flex;
-		gap: 2rem;
+		gap: 2.5rem;
+		align-items: center;
 	}
 	
 	.nav-link {
 		text-decoration: none;
 		color: var(--text-light);
 		font-weight: 500;
-		transition: color 0.2s;
+		font-size: 0.95rem;
+		transition: all 0.2s ease;
+		position: relative;
+		padding: 0.5rem 0;
 	}
 	
 	.nav-link:hover {
 		color: var(--text-color);
 	}
 	
+	.nav-link::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 0;
+		height: 2px;
+		background-color: var(--primary-color);
+		transition: width 0.2s ease;
+	}
+	
+	.nav-link:hover::after {
+		width: 100%;
+	}
+	
 	.cart-link {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
-		background-color: var(--primary-color);
-		color: white !important;
-		padding: 0.5rem 1rem;
-		border-radius: 6px;
-		transition: background-color 0.2s;
+		gap: 0.75rem;
+		background: transparent;
+		color: var(--text-light) !important;
+		padding: 0.5rem 0;
+		transition: all 0.2s ease;
+		font-weight: 500;
+		font-size: 0.95rem;
+		position: relative;
 	}
 	
 	.cart-link:hover {
-		background-color: #1e3a8a;
-		color: white !important;
+		color: var(--text-color) !important;
 	}
 	
-	.cart-link svg {
-		width: 18px;
+	.cart-link::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 0;
+		height: 2px;
+		background-color: var(--primary-color);
+		transition: width 0.2s ease;
+	}
+	
+	.cart-link:hover::after {
+		width: 100%;
+	}
+	
+	.cart-icon-container {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	.cart-icon-container svg {
+		width: 20px;
+		height: 20px;
+		transition: transform 0.2s ease;
+	}
+	
+	.cart-link:hover .cart-icon-container svg {
+		transform: scale(1.1);
+	}
+	
+	.cart-count {
+		position: absolute;
+		top: -8px;
+		right: -8px;
+		background: var(--primary-color);
+		color: white;
+		font-size: 0.7rem;
+		font-weight: 700;
+		min-width: 18px;
 		height: 18px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		line-height: 1;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		animation: pulse 2s infinite;
+	}
+	
+	.cart-text {
+		display: none;
+	}
+	
+	@keyframes pulse {
+		0% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.1);
+		}
+		100% {
+			transform: scale(1);
+		}
 	}
 	
 	/* Main */
@@ -180,21 +285,24 @@ const { title = "Store Demo" } = Astro.props;
 	/* Footer */
 	.footer {
 		background-color: var(--background-light);
-		padding: 3rem 0;
-		margin-top: 4rem;
+		padding: 2.5rem 0 1.5rem 0;
+		margin-top: 3rem;
+		border-top: 1px solid var(--border-color);
 	}
 	
 	.footer-content {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: 2rem;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 3rem;
+		margin-bottom: 2rem;
 	}
 	
 	.footer-section h3 {
-		font-size: 1.1rem;
-		font-weight: 600;
-		margin-bottom: 1rem;
+		font-size: 1rem;
+		font-weight: 700;
+		margin-bottom: 1.25rem;
 		color: var(--text-color);
+		letter-spacing: -0.025em;
 	}
 	
 	.footer-section ul {
@@ -204,33 +312,152 @@ const { title = "Store Demo" } = Astro.props;
 	}
 	
 	.footer-section li {
-		margin-bottom: 0.5rem;
+		margin-bottom: 0.75rem;
 	}
 	
 	.footer-section a {
 		text-decoration: none;
 		color: var(--text-light);
 		font-size: 0.9rem;
-		transition: color 0.2s;
+		font-weight: 500;
+		transition: all 0.2s ease;
+		display: inline-block;
 	}
 	
 	.footer-section a:hover {
 		color: var(--text-color);
+		transform: translateX(4px);
+	}
+	
+	.brand-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+	
+	.brand-tag {
+		background-color: var(--background-color);
+		color: var(--text-light);
+		padding: 0.375rem 0.75rem;
+		border-radius: 20px;
+		font-size: 0.8rem;
+		font-weight: 500;
+		border: 1px solid var(--border-color);
+		transition: all 0.2s ease;
+		cursor: pointer;
+	}
+	
+	.brand-tag:hover {
+		background-color: var(--primary-color);
+		color: white;
+		border-color: var(--primary-color);
+		transform: translateY(-1px);
+		box-shadow: var(--shadow-sm);
+	}
+	
+	.footer-bottom {
+		border-top: 1px solid var(--border-color);
+		padding-top: 1.5rem;
+		text-align: center;
+	}
+	
+	.footer-bottom p {
+		color: var(--text-muted);
+		font-size: 0.85rem;
+		margin: 0;
 	}
 	
 	/* Responsive */
+	@media (min-width: 1024px) {
+		.cart-text {
+			display: inline;
+		}
+		
+		.cart-link {
+			gap: 0.5rem;
+		}
+	}
+	
 	@media (max-width: 768px) {
+		.header {
+			padding: 1rem 0;
+		}
+		
 		.header-content {
 			flex-direction: column;
-			gap: 1rem;
+			gap: 1.25rem;
+		}
+		
+		.logo {
+			font-size: 1.5rem;
 		}
 		
 		.nav {
-			gap: 1rem;
+			gap: 1.5rem;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+		
+		.nav-link {
+			font-size: 0.9rem;
+		}
+		
+		.cart-link {
+			padding: 0.625rem 1rem;
+			font-size: 0.85rem;
+		}
+		
+		.footer {
+			padding: 2rem 0 1rem 0;
+		}
+		
+		.footer-content {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+		
+		.footer-section {
+			text-align: center;
+		}
+		
+		.brand-tags {
+			justify-content: center;
 		}
 		
 		.container {
 			padding: 0 15px;
+		}
+	}
+	
+	@media (max-width: 480px) {
+		.nav {
+			gap: 1rem;
+		}
+		
+		.nav-link {
+			font-size: 0.85rem;
+		}
+		
+		.cart-link {
+			padding: 0.5rem 0.875rem;
+			font-size: 0.8rem;
+		}
+		
+		.footer {
+			padding: 1.5rem 0 1rem 0;
+		}
+		
+		.footer-content {
+			gap: 1.5rem;
+		}
+		
+		.brand-tags {
+			gap: 0.375rem;
+		}
+		
+		.brand-tag {
+			font-size: 0.75rem;
+			padding: 0.25rem 0.5rem;
 		}
 	}
 </style>

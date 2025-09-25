@@ -1,0 +1,377 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { cartItems, calculateCartTotals, products } from '../data/products';
+
+const totals = calculateCartTotals(cartItems);
+const recommendedProducts = products.slice(0, 4);
+---
+
+<Layout title="Carrito de Compras - Store Demo">
+	<div class="cart-header">
+		<h1 class="cart-title">Carrito de Compras</h1>
+		<p class="shipping-notice">Eres elegible para envío gratis.</p>
+	</div>
+
+	<div class="cart-content">
+		<div class="cart-items">
+			{cartItems.map((item) => (
+				<div class="cart-item">
+					<div class="item-image">
+						<img src={item.product.image} alt={item.product.name} />
+					</div>
+					<div class="item-details">
+						<h3 class="item-name">{item.product.name}</h3>
+						<p class="item-variants">
+							{item.product.colors.length} colores, {item.selectedSize}
+						</p>
+						<div class="item-status">
+							<span class={`status-badge ${item.product.inStock ? 'in-stock' : 'out-of-stock'}`}>
+								{item.product.inStock ? 'En Stock' : 'Agotado'}
+							</span>
+						</div>
+						<div class="item-quantity">
+							<label for={`quantity-${item.product.id}`}>Cantidad:</label>
+							<input 
+								type="number" 
+								id={`quantity-${item.product.id}`}
+								value={item.quantity} 
+								min="1" 
+								class="quantity-input"
+							/>
+						</div>
+					</div>
+					<div class="item-price">
+						<span class="price">${item.product.price.toLocaleString()}</span>
+					</div>
+				</div>
+			))}
+		</div>
+
+		<div class="order-summary">
+			<h2 class="summary-title">Resumen del Pedido</h2>
+			<div class="summary-details">
+				<div class="summary-row">
+					<span>Subtotal</span>
+					<span>${totals.subtotal.toLocaleString()}</span>
+				</div>
+				<div class="summary-row">
+					<span>Envío</span>
+					<span>{totals.shipping === 0 ? 'Gratis' : `$${totals.shipping.toLocaleString()}`}</span>
+				</div>
+				<div class="summary-row">
+					<span>Impuestos</span>
+					<span>${totals.tax.toLocaleString()}</span>
+				</div>
+				<div class="summary-row total">
+					<span>Total</span>
+					<span>${totals.total.toLocaleString()}</span>
+				</div>
+			</div>
+			<button class="checkout-btn">Proceder al Pago</button>
+		</div>
+	</div>
+
+	<div class="recommended-section">
+		<h2 class="recommended-title">Productos Recomendados</h2>
+		<div class="recommended-grid">
+			{recommendedProducts.map((product) => (
+				<div class="recommended-item">
+					<div class="recommended-image">
+						<img src={product.image} alt={product.name} />
+					</div>
+					<div class="recommended-info">
+						<h3 class="recommended-name">{product.name}</h3>
+						<p class="recommended-price">${product.price.toLocaleString()}</p>
+						<button class="add-to-cart-btn">Agregar al Carrito</button>
+					</div>
+				</div>
+			))}
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.cart-header {
+		margin-bottom: 2rem;
+		max-width: 100%;
+		overflow: hidden;
+	}
+	
+	.cart-title {
+		font-size: 2.5rem;
+		font-weight: 700;
+		margin: 0 0 0.5rem 0;
+		color: var(--text-color);
+	}
+	
+	.shipping-notice {
+		color: var(--text-light);
+		font-size: 1.1rem;
+		margin: 0;
+	}
+	
+	.cart-content {
+		display: grid;
+		grid-template-columns: 2fr 1fr;
+		gap: 3rem;
+		margin-bottom: 4rem;
+		max-width: 100%;
+		overflow: hidden;
+	}
+	
+	.cart-items {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		max-width: 100%;
+		overflow: hidden;
+	}
+	
+	.cart-item {
+		display: grid;
+		grid-template-columns: 120px 1fr auto;
+		gap: 1.5rem;
+		padding: 1.5rem;
+		border: 1px solid var(--border-color);
+		border-radius: 12px;
+		background: var(--background-color);
+		max-width: 100%;
+		overflow: hidden;
+	}
+	
+	.item-image img {
+		width: 100%;
+		height: 120px;
+		object-fit: cover;
+		border-radius: 8px;
+	}
+	
+	.item-details {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		min-width: 0;
+		overflow: hidden;
+	}
+	
+	.item-name {
+		font-size: 1.2rem;
+		font-weight: 600;
+		margin: 0;
+		color: var(--text-color);
+		word-wrap: break-word;
+		overflow: hidden;
+	}
+	
+	.item-variants {
+		color: var(--text-light);
+		margin: 0;
+		font-size: 0.9rem;
+	}
+	
+	.status-badge {
+		display: inline-block;
+		padding: 0.25rem 0.75rem;
+		border-radius: 20px;
+		font-size: 0.8rem;
+		font-weight: 500;
+		width: fit-content;
+	}
+	
+	.status-badge.in-stock {
+		background-color: #dcfce7;
+		color: #166534;
+	}
+	
+	.status-badge.out-of-stock {
+		background-color: #fee2e2;
+		color: #dc2626;
+	}
+	
+	.item-quantity {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 0.5rem;
+	}
+	
+	.item-quantity label {
+		font-size: 0.9rem;
+		color: var(--text-light);
+	}
+	
+	.quantity-input {
+		width: 60px;
+		padding: 0.5rem;
+		border: 1px solid var(--border-color);
+		border-radius: 6px;
+		text-align: center;
+		font-size: 0.9rem;
+	}
+	
+	.item-price {
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-end;
+	}
+	
+	.price {
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: var(--text-color);
+	}
+	
+	.order-summary {
+		background: var(--background-light);
+		padding: 2rem;
+		border-radius: 12px;
+		border: 1px solid var(--border-color);
+		height: fit-content;
+	}
+	
+	.summary-title {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin: 0 0 1.5rem 0;
+		color: var(--text-color);
+	}
+	
+	.summary-details {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		margin-bottom: 2rem;
+	}
+	
+	.summary-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: 1rem;
+	}
+	
+	.summary-row.total {
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: var(--text-color);
+		padding-top: 1rem;
+		border-top: 1px solid var(--border-color);
+	}
+	
+	.checkout-btn {
+		width: 100%;
+		padding: 1rem 2rem;
+		background: var(--primary-color);
+		color: white;
+		border: none;
+		border-radius: 8px;
+		font-size: 1.1rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+	
+	.checkout-btn:hover {
+		background: var(--primary-hover);
+		transform: translateY(-1px);
+	}
+	
+	.recommended-section {
+		margin-top: 4rem;
+	}
+	
+	.recommended-title {
+		font-size: 2rem;
+		font-weight: 700;
+		margin: 0 0 2rem 0;
+		color: var(--text-color);
+		text-align: center;
+	}
+	
+	.recommended-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 2rem;
+	}
+	
+	.recommended-item {
+		background: var(--background-color);
+		border: 1px solid var(--border-color);
+		border-radius: 12px;
+		overflow: hidden;
+		transition: all 0.2s ease;
+	}
+	
+	.recommended-item:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--shadow-md);
+	}
+	
+	.recommended-image {
+		aspect-ratio: 1;
+		overflow: hidden;
+	}
+	
+	.recommended-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	
+	.recommended-info {
+		padding: 1.5rem;
+		text-align: center;
+	}
+	
+	.recommended-name {
+		font-size: 1.1rem;
+		font-weight: 600;
+		margin: 0 0 0.5rem 0;
+		color: var(--text-color);
+	}
+	
+	.recommended-price {
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: var(--primary-color);
+		margin: 0 0 1rem 0;
+	}
+	
+	.add-to-cart-btn {
+		width: 100%;
+		padding: 0.75rem 1rem;
+		background: var(--primary-color);
+		color: white;
+		border: none;
+		border-radius: 8px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+	
+	.add-to-cart-btn:hover {
+		background: var(--primary-hover);
+	}
+	
+	@media (max-width: 768px) {
+		.cart-content {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+		
+		.cart-item {
+			grid-template-columns: 1fr;
+			text-align: center;
+		}
+		
+		.item-image {
+			width: 100%;
+			max-width: 200px;
+			margin: 0 auto;
+		}
+		
+		.recommended-grid {
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		}
+	}
+</style>

@@ -9,10 +9,13 @@ Una tienda online moderna y responsiva construida con **Astro 5.14.0**, diseñad
 ## ✨ Características
 
 - 🚀 **Astro 5.14.0** - Framework moderno con arquitectura de islas
-- 🎨 **Diseño responsivo** - Optimizado para móviles, tablets y desktop
+- 🎨 **Diseño Flat Moderno** - Estilo minimalista y elegante
 - 🛒 **Carrito de compras** - Funcionalidad completa de e-commerce
+- 🔍 **Sistema de búsqueda** - Búsqueda por nombre y categoría
+- 📄 **Catálogo con filtros** - Filtros por categoría, precio y stock
+- 📱 **Paginación inteligente** - Navegación eficiente de productos
 - 🌐 **Localización** - Interfaz en español
-- 📱 **Mobile-first** - Diseño adaptativo
+- 📱 **Mobile-first** - Diseño adaptativo y responsivo
 - ⚡ **Rendimiento** - Carga rápida y optimizada
 - 🔧 **TypeScript** - Tipado estático para mejor desarrollo
 
@@ -25,9 +28,11 @@ store-demo/
 │   ├── 📁 data/               # Datos centralizados (futuro: API)
 │   │   └── 📄 products.ts     # Productos y lógica del carrito
 │   ├── 📁 layouts/            # Layouts de página
-│   │   └── 📄 Layout.astro    # Layout principal
+│   │   └── 📄 Layout.astro    # Layout principal con header y footer
 │   └── 📁 pages/              # Páginas de la aplicación
-│       └── 📄 index.astro     # Página del carrito
+│       ├── 📄 index.astro     # Página de inicio
+│       ├── 📄 catalogo.astro  # Catálogo de productos con filtros
+│       └── 📄 carrito.astro   # Página del carrito de compras
 ├── 📄 astro.config.mjs        # Configuración de Astro
 ├── 📄 package.json            # Dependencias y scripts
 └── 📄 README.md               # Este archivo
@@ -94,24 +99,43 @@ yarn preview
 
 ## 🎯 Funcionalidades Implementadas
 
+### ✅ Página de Inicio
+- Hero section atractivo con call-to-action
+- Grid de categorías con iconos y navegación
+- Productos destacados con información completa
+- Sección de características de la tienda
+- Diseño responsivo y moderno
+
+### ✅ Catálogo de Productos
+- Grid responsivo de productos con diseño flat
+- Sistema de búsqueda por nombre y categoría
+- Filtros avanzados (categoría, precio, stock)
+- Paginación inteligente (8 productos por página)
+- Ordenamiento por diferentes criterios
+- Estados de stock visuales
+
 ### ✅ Carrito de Compras
-- Visualización de productos en el carrito
+- Visualización completa de productos en el carrito
 - Cálculo automático de totales (subtotal, envío, impuestos)
 - Estados de stock (En Stock/Agotado)
 - Cantidades editables
 - Productos recomendados
+- Resumen de pedido con checkout
 
-### ✅ Navegación
-- Header con navegación principal
-- Enlaces a: Inicio, Catálogo, Contacto
-- Botón de carrito con icono
-- Footer con enlaces organizados
+### ✅ Navegación y Layout
+- Header sticky con navegación principal
+- Enlaces a: Inicio, Catálogo, Contacto, Carrito
+- Botón de carrito con contador de items
+- Footer de 3 columnas (Secciones, Marcas, Categorías)
+- Diseño flat moderno y consistente
 
-### ✅ Diseño
+### ✅ Diseño y UX
 - Layout responsivo con CSS Grid y Flexbox
 - Tipografía moderna (Inter font)
-- Colores consistentes y accesibles
+- Paleta de colores consistente y accesible
 - Animaciones suaves y hover effects
+- Iconos SVG optimizados
+- Estados de carga y transiciones
 
 ## 🔧 Tecnologías Utilizadas
 
@@ -131,14 +155,16 @@ El proyecto está optimizado para:
 
 ## 🚧 Próximas Funcionalidades
 
-- [ ] **Página de catálogo** de productos
-- [ ] **Página de producto individual**
-- [ ] **Página de contacto**
-- [ ] **Funcionalidad del carrito** (agregar/eliminar productos)
-- [ ] **Integración con API** real
-- [ ] **Autenticación** de usuarios
-- [ ] **Proceso de checkout** completo
-- [ ] **Sistema de pagos**
+- [ ] **Página de producto individual** con detalles completos
+- [ ] **Página de contacto** con formulario funcional
+- [ ] **Funcionalidad del carrito** (agregar/eliminar productos dinámicamente)
+- [ ] **Integración con API** real para productos y usuarios
+- [ ] **Autenticación** de usuarios y perfiles
+- [ ] **Proceso de checkout** completo con pasos
+- [ ] **Sistema de pagos** integrado
+- [ ] **Wishlist** de productos favoritos
+- [ ] **Sistema de reviews** y calificaciones
+- [ ] **Notificaciones** en tiempo real
 
 ## 🤝 Contribuir
 
