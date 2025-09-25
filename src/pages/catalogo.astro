@@ -160,28 +160,30 @@ const maxPrice = Math.max(...products.map(product => product.price));
 			<div class="products-grid">
 				{paginatedProducts.map(product => (
 					<article class="product-card">
-						<div class="product-image">
-							<img src={product.image} alt={product.name} />
-							{!product.inStock && <div class="out-of-stock-overlay">Agotado</div>}
-						</div>
-						<div class="product-info">
-							<h3 class="product-name">{product.name}</h3>
-							<p class="product-category">{product.category}</p>
-							<div class="product-colors">
-								{product.colors.slice(0, 4).map(color => (
-									<span class="color-dot" style={`background-color: ${color.toLowerCase()}`}></span>
-								))}
-								{product.colors.length > 4 && <span class="more-colors">+{product.colors.length - 4}</span>}
+						<a href={`/producto/${product.id}`} class="product-link">
+							<div class="product-image">
+								<img src={product.image} alt={product.name} />
+								{!product.inStock && <div class="out-of-stock-overlay">Agotado</div>}
 							</div>
-							<div class="product-price">
-								<span class="price">${product.price.toLocaleString()}</span>
-								{!product.inStock && <span class="stock-status out">Agotado</span>}
-								{product.inStock && <span class="stock-status in">En stock</span>}
+							<div class="product-info">
+								<h3 class="product-name">{product.name}</h3>
+								<p class="product-category">{product.category}</p>
+								<div class="product-colors">
+									{product.colors.slice(0, 4).map(color => (
+										<span class="color-dot" style={`background-color: ${color.toLowerCase()}`}></span>
+									))}
+									{product.colors.length > 4 && <span class="more-colors">+{product.colors.length - 4}</span>}
+								</div>
+								<div class="product-price">
+									<span class="price">${product.price.toLocaleString()}</span>
+									{!product.inStock && <span class="stock-status out">Agotado</span>}
+									{product.inStock && <span class="stock-status in">En stock</span>}
+								</div>
 							</div>
-							<button class="add-to-cart" disabled={!product.inStock}>
-								{product.inStock ? 'Agregar al carrito' : 'No disponible'}
-							</button>
-						</div>
+						</a>
+						<button class="add-to-cart" disabled={!product.inStock}>
+							{product.inStock ? 'Agregar al carrito' : 'No disponible'}
+						</button>
 					</article>
 				))}
 			</div>
@@ -463,12 +465,27 @@ const maxPrice = Math.max(...products.map(product => product.price));
 		overflow: hidden;
 		transition: all 0.2s ease;
 		position: relative;
+		display: flex;
+		flex-direction: column;
 	}
 	
 	.product-card:hover {
 		transform: translateY(-4px);
 		box-shadow: var(--shadow-md);
 		border-color: var(--primary-color);
+	}
+	
+	.product-link {
+		text-decoration: none;
+		color: inherit;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+	
+	.product-link:hover {
+		text-decoration: none;
+		color: inherit;
 	}
 	
 	.product-image {

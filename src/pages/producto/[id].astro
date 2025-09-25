@@ -1,0 +1,913 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { products } from '../../data/products';
+
+export async function getStaticPaths() {
+  return products.map((product) => ({
+    params: { id: product.id },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const relatedProducts = products.filter(p => p.id !== product.id).slice(0, 4);
+---
+
+<Layout title={`${product.name} - Store Demo`}>
+	<div class="product-detail">
+		<div class="product-main">
+			<div class="product-images">
+				<div class="main-image">
+					<img src={product.image} alt={product.name} />
+				</div>
+				<div class="thumbnail-images">
+					{product.colors.slice(0, 4).map((color, index) => (
+						<div class="thumbnail" data-color={color}>
+							<img src={product.image} alt={`${product.name} - ${color}`} />
+						</div>
+					))}
+				</div>
+			</div>
+
+			<div class="product-info">
+				<h1 class="product-title">{product.name}</h1>
+				<p class="product-tagline">
+					The time is now for it to be okay to be great. People in this world shun people for being great. 
+					For being a bright color. For standing out.
+				</p>
+				
+				<div class="product-price">
+					<span class="price">${product.price.toLocaleString()}</span>
+				</div>
+
+				<div class="product-rating">
+					<div class="stars">
+						{Array.from({length: 5}, (_, i) => (
+							<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+								<path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
+							</svg>
+						))}
+					</div>
+					<span class="rating-text">117 reviews</span>
+				</div>
+
+				<div class="product-options">
+					<div class="size-selection">
+						<label class="size-label">Size</label>
+						<div class="size-options">
+							{product.sizes.map(size => (
+								<button class={`size-option ${size === 'XS' ? 'selected' : ''}`} data-size={size}>
+									{size}
+								</button>
+							))}
+						</div>
+						<a href="#" class="size-guide">Size guide</a>
+					</div>
+
+					<div class="color-selection">
+						<label class="color-label">Color</label>
+						<div class="color-options">
+							{product.colors.slice(0, 6).map(color => (
+								<button class="color-option" data-color={color} style={`background-color: ${color.toLowerCase()}`}>
+									<span class="color-name">{color}</span>
+								</button>
+							))}
+						</div>
+					</div>
+				</div>
+
+				<div class="product-actions">
+					<button class="add-to-cart-btn" disabled={!product.inStock}>
+						{product.inStock ? 'Add to cart' : 'Out of stock'}
+					</button>
+					<button class="wishlist-btn">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+						</svg>
+					</button>
+				</div>
+
+				<div class="product-status">
+					{product.inStock ? (
+						<span class="in-stock">✓ In Stock</span>
+					) : (
+						<span class="out-of-stock">✗ Out of Stock</span>
+					)}
+				</div>
+			</div>
+		</div>
+
+		<div class="product-description">
+			<div class="description-content">
+				<h2>Product Description</h2>
+				<p>
+					There's nothing I really wanted to do in life that I wasn't able to get good at. 
+					That's my skill. I'm not really specifically talented at anything except for the 
+					ability to learn. That's what I do. That's what I'm here for. Don't be afraid to 
+					be wrong because you can't learn anything from a compliment.
+				</p>
+				
+				<div class="benefits">
+					<h3>Benefits</h3>
+					<ul>
+						<li>Oil is a primary source of energy for the world economy</li>
+						<li>Versatile for a wide range of products and applications</li>
+						<li>Crucial source of petrochemicals for manufacturing</li>
+					</ul>
+				</div>
+
+				<div class="more-info">
+					<h3>More about product</h3>
+					<p>
+						There's nothing I really wanted to do in life that I wasn't able to get good at. 
+						That's my skill. I'm not really specifically talented at anything except for the 
+						ability to learn. That's what I do. That's what I'm here for. Don't be afraid to 
+						be wrong because you can't learn anything from a compliment.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="customer-reviews">
+			<div class="reviews-header">
+				<h2>Our Customer's Opinion</h2>
+				<p>
+					Society has put up so many boundaries, so many limitations on what's right and wrong 
+					that it's almost impossible to get a pure thought out.
+				</p>
+			</div>
+
+			<div class="reviews-summary">
+				<div class="overall-rating">
+					<span class="rating-number">4.7</span>
+					<div class="rating-stars">
+						{Array.from({length: 5}, (_, i) => (
+							<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+								<path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
+							</svg>
+						))}
+					</div>
+					<span class="rating-count">Based on 6 reviews</span>
+				</div>
+
+				<div class="rating-breakdown">
+					<div class="rating-bar">
+						<span class="stars">5★</span>
+						<div class="bar">
+							<div class="fill" style="width: 50%"></div>
+						</div>
+						<span class="percentage">50%</span>
+					</div>
+					<div class="rating-bar">
+						<span class="stars">4★</span>
+						<div class="bar">
+							<div class="fill" style="width: 33%"></div>
+						</div>
+						<span class="percentage">33%</span>
+					</div>
+					<div class="rating-bar">
+						<span class="stars">3★</span>
+						<div class="bar">
+							<div class="fill" style="width: 16%"></div>
+						</div>
+						<span class="percentage">16%</span>
+					</div>
+					<div class="rating-bar">
+						<span class="stars">2★</span>
+						<div class="bar">
+							<div class="fill" style="width: 0%"></div>
+						</div>
+						<span class="percentage">0%</span>
+					</div>
+					<div class="rating-bar">
+						<span class="stars">1★</span>
+						<div class="bar">
+							<div class="fill" style="width: 0%"></div>
+						</div>
+						<span class="percentage">0%</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="reviews-list">
+				<div class="review-item">
+					<div class="review-stars">
+						{Array.from({length: 5}, (_, i) => (
+							<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+								<path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
+							</svg>
+						))}
+					</div>
+					<p class="review-text">
+						As we live, our hearts turn colder. Cause pain is what we go through as we become older. 
+						We get insulted by others, lose trust for those others. We get back stabbed by friends.
+					</p>
+					<div class="review-author">
+						<div class="author-avatar">
+							<img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="Hector Gibbs" />
+						</div>
+						<div class="author-info">
+							<span class="author-name">Hector Gibbs</span>
+							<span class="review-date">July 17, 2023</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="review-item">
+					<div class="review-stars">
+						{Array.from({length: 5}, (_, i) => (
+							<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+								<path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
+							</svg>
+						))}
+					</div>
+					<p class="review-text">
+						It really matters and then like it really doesn't matter. What matters is the people who 
+						are sparked by it. And the people who are like offended by it, it doesn't matter.
+					</p>
+					<div class="review-author">
+						<div class="author-avatar">
+							<img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face" alt="Willie Manson" />
+						</div>
+						<div class="author-info">
+							<span class="author-name">Willie Manson</span>
+							<span class="review-date">Aug 18, 2023</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="write-review">
+				<h3>We value your opinion</h3>
+				<p>The time is now for it to be okay to be great. People in this world shun people for being great.</p>
+				<button class="write-review-btn">Write a review</button>
+			</div>
+		</div>
+
+		<div class="related-products">
+			<h2>Customers also purchased</h2>
+			<div class="related-grid">
+				{relatedProducts.map(relatedProduct => (
+					<div class="related-item">
+						<div class="related-image">
+							<img src={relatedProduct.image} alt={relatedProduct.name} />
+						</div>
+						<div class="related-info">
+							<span class="related-colors">{relatedProduct.colors.length} colors</span>
+							<h3 class="related-name">{relatedProduct.name}</h3>
+							<span class="related-price">${relatedProduct.price.toLocaleString()}</span>
+						</div>
+					</div>
+				))}
+			</div>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.product-detail {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 2rem 0;
+	}
+
+	.product-main {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 4rem;
+		margin-bottom: 4rem;
+	}
+
+	.product-images {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.main-image {
+		aspect-ratio: 1;
+		border-radius: 12px;
+		overflow: hidden;
+		background: var(--background-light);
+	}
+
+	.main-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.thumbnail-images {
+		display: flex;
+		gap: 0.75rem;
+	}
+
+	.thumbnail {
+		width: 80px;
+		height: 80px;
+		border-radius: 8px;
+		overflow: hidden;
+		cursor: pointer;
+		border: 2px solid transparent;
+		transition: all 0.2s ease;
+	}
+
+	.thumbnail:hover,
+	.thumbnail.active {
+		border-color: var(--primary-color);
+	}
+
+	.thumbnail img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.product-info {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.product-title {
+		font-size: 2.5rem;
+		font-weight: 700;
+		margin: 0;
+		color: var(--text-color);
+		line-height: 1.2;
+	}
+
+	.product-tagline {
+		font-size: 1.1rem;
+		color: var(--text-light);
+		line-height: 1.6;
+		margin: 0;
+	}
+
+	.product-price {
+		font-size: 2rem;
+		font-weight: 700;
+		color: var(--text-color);
+	}
+
+	.product-rating {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.stars {
+		display: flex;
+		gap: 0.25rem;
+		color: #fbbf24;
+	}
+
+	.rating-text {
+		color: var(--text-light);
+		font-size: 0.9rem;
+	}
+
+	.product-options {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.size-selection,
+	.color-selection {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.size-label,
+	.color-label {
+		font-weight: 600;
+		color: var(--text-color);
+		font-size: 1rem;
+	}
+
+	.size-options {
+		display: flex;
+		gap: 0.75rem;
+	}
+
+	.size-option {
+		padding: 0.75rem 1.5rem;
+		border: 1px solid var(--border-color);
+		background: var(--background-color);
+		color: var(--text-color);
+		border-radius: 8px;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+
+	.size-option:hover {
+		border-color: var(--primary-color);
+	}
+
+	.size-option.selected {
+		background: var(--primary-color);
+		color: white;
+		border-color: var(--primary-color);
+	}
+
+	.size-guide {
+		color: var(--primary-color);
+		text-decoration: none;
+		font-size: 0.9rem;
+		align-self: flex-start;
+	}
+
+	.color-options {
+		display: flex;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+
+	.color-option {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		border: 2px solid var(--border-color);
+		cursor: pointer;
+		transition: all 0.2s ease;
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.color-option:hover {
+		transform: scale(1.1);
+	}
+
+	.color-option.selected {
+		border-color: var(--primary-color);
+		box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+	}
+
+	.color-name {
+		position: absolute;
+		bottom: -25px;
+		left: 50%;
+		transform: translateX(-50%);
+		font-size: 0.75rem;
+		color: var(--text-light);
+		white-space: nowrap;
+	}
+
+	.product-actions {
+		display: flex;
+		gap: 1rem;
+		align-items: center;
+	}
+
+	.add-to-cart-btn {
+		flex: 1;
+		padding: 1rem 2rem;
+		background: var(--text-color);
+		color: white;
+		border: none;
+		border-radius: 8px;
+		font-size: 1rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+
+	.add-to-cart-btn:hover:not(:disabled) {
+		background: var(--primary-color);
+		transform: translateY(-1px);
+	}
+
+	.add-to-cart-btn:disabled {
+		background: var(--border-color);
+		color: var(--text-muted);
+		cursor: not-allowed;
+	}
+
+	.wishlist-btn {
+		width: 48px;
+		height: 48px;
+		border: 1px solid var(--border-color);
+		background: var(--background-color);
+		color: var(--text-color);
+		border-radius: 8px;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.wishlist-btn:hover {
+		border-color: var(--primary-color);
+		color: var(--primary-color);
+	}
+
+	.product-status {
+		font-size: 0.9rem;
+		font-weight: 500;
+	}
+
+	.in-stock {
+		color: #166534;
+	}
+
+	.out-of-stock {
+		color: #dc2626;
+	}
+
+	.product-description {
+		margin-bottom: 4rem;
+	}
+
+	.description-content {
+		max-width: 800px;
+	}
+
+	.description-content h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin: 0 0 1rem 0;
+		color: var(--text-color);
+	}
+
+	.description-content p {
+		color: var(--text-light);
+		line-height: 1.6;
+		margin-bottom: 2rem;
+	}
+
+	.benefits {
+		margin-bottom: 2rem;
+	}
+
+	.benefits h3 {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 0 0 1rem 0;
+		color: var(--text-color);
+	}
+
+	.benefits ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.benefits li {
+		padding: 0.5rem 0;
+		color: var(--text-light);
+		position: relative;
+		padding-left: 1.5rem;
+	}
+
+	.benefits li::before {
+		content: '•';
+		color: var(--primary-color);
+		font-weight: bold;
+		position: absolute;
+		left: 0;
+	}
+
+	.more-info h3 {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 0 0 1rem 0;
+		color: var(--text-color);
+	}
+
+	.customer-reviews {
+		margin-bottom: 4rem;
+	}
+
+	.reviews-header {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+
+	.reviews-header h2 {
+		font-size: 2rem;
+		font-weight: 700;
+		margin: 0 0 1rem 0;
+		color: var(--text-color);
+	}
+
+	.reviews-header p {
+		color: var(--text-light);
+		font-size: 1.1rem;
+		max-width: 600px;
+		margin: 0 auto;
+		line-height: 1.6;
+	}
+
+	.reviews-summary {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 3rem;
+		margin-bottom: 3rem;
+		align-items: start;
+	}
+
+	.overall-rating {
+		text-align: center;
+	}
+
+	.rating-number {
+		font-size: 3rem;
+		font-weight: 700;
+		color: var(--text-color);
+		display: block;
+		margin-bottom: 0.5rem;
+	}
+
+	.rating-stars {
+		display: flex;
+		gap: 0.25rem;
+		justify-content: center;
+		margin-bottom: 0.5rem;
+		color: #fbbf24;
+	}
+
+	.rating-count {
+		color: var(--text-light);
+		font-size: 0.9rem;
+	}
+
+	.rating-breakdown {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.rating-bar {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.rating-bar .stars {
+		width: 30px;
+		color: var(--text-light);
+	}
+
+	.bar {
+		flex: 1;
+		height: 8px;
+		background: var(--border-color);
+		border-radius: 4px;
+		overflow: hidden;
+	}
+
+	.fill {
+		height: 100%;
+		background: #fbbf24;
+		transition: width 0.3s ease;
+	}
+
+	.percentage {
+		width: 30px;
+		text-align: right;
+		color: var(--text-light);
+		font-size: 0.9rem;
+	}
+
+	.reviews-list {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 2rem;
+		margin-bottom: 3rem;
+	}
+
+	.review-item {
+		background: var(--background-color);
+		border: 1px solid var(--border-color);
+		border-radius: 12px;
+		padding: 1.5rem;
+	}
+
+	.review-stars {
+		display: flex;
+		gap: 0.25rem;
+		margin-bottom: 1rem;
+		color: #fbbf24;
+	}
+
+	.review-text {
+		color: var(--text-light);
+		line-height: 1.6;
+		margin-bottom: 1.5rem;
+	}
+
+	.review-author {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.author-avatar {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		overflow: hidden;
+	}
+
+	.author-avatar img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.author-info {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.author-name {
+		font-weight: 600;
+		color: var(--text-color);
+		font-size: 0.9rem;
+	}
+
+	.review-date {
+		color: var(--text-light);
+		font-size: 0.8rem;
+	}
+
+	.write-review {
+		text-align: center;
+		background: var(--background-light);
+		padding: 2rem;
+		border-radius: 12px;
+	}
+
+	.write-review h3 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin: 0 0 1rem 0;
+		color: var(--text-color);
+	}
+
+	.write-review p {
+		color: var(--text-light);
+		margin-bottom: 1.5rem;
+		line-height: 1.6;
+	}
+
+	.write-review-btn {
+		padding: 0.75rem 2rem;
+		background: var(--text-color);
+		color: white;
+		border: none;
+		border-radius: 8px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+
+	.write-review-btn:hover {
+		background: var(--primary-color);
+		transform: translateY(-1px);
+	}
+
+	.related-products {
+		margin-bottom: 2rem;
+	}
+
+	.related-products h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin: 0 0 2rem 0;
+		color: var(--text-color);
+	}
+
+	.related-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 2rem;
+	}
+
+	.related-item {
+		background: var(--background-color);
+		border: 1px solid var(--border-color);
+		border-radius: 12px;
+		overflow: hidden;
+		transition: all 0.2s ease;
+		cursor: pointer;
+	}
+
+	.related-item:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--shadow-md);
+	}
+
+	.related-image {
+		aspect-ratio: 1;
+		overflow: hidden;
+	}
+
+	.related-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.related-info {
+		padding: 1.5rem;
+	}
+
+	.related-colors {
+		font-size: 0.8rem;
+		color: var(--text-light);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.related-name {
+		font-size: 1.1rem;
+		font-weight: 600;
+		color: var(--text-color);
+		margin: 0.5rem 0;
+		display: block;
+	}
+
+	.related-price {
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: var(--text-color);
+	}
+
+	@media (max-width: 768px) {
+		.product-main {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+
+		.thumbnail-images {
+			justify-content: center;
+		}
+
+		.product-title {
+			font-size: 2rem;
+		}
+
+		.reviews-summary {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+
+		.reviews-list {
+			grid-template-columns: 1fr;
+		}
+
+		.related-grid {
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		}
+	}
+</style>
+
+<script>
+	// Funcionalidad para cambiar imagen principal
+	document.addEventListener('DOMContentLoaded', function() {
+		const thumbnails = document.querySelectorAll('.thumbnail');
+		const mainImage = document.querySelector('.main-image img');
+
+		thumbnails.forEach(thumbnail => {
+			thumbnail.addEventListener('click', function(this: HTMLElement) {
+				// Remover clase active de todos los thumbnails
+				thumbnails.forEach(t => t.classList.remove('active'));
+				// Agregar clase active al thumbnail clickeado
+				this.classList.add('active');
+				// Cambiar imagen principal
+				if (mainImage) {
+					const img = this.querySelector('img') as HTMLImageElement;
+					if (img) {
+						(mainImage as HTMLImageElement).src = img.src;
+					}
+				}
+			});
+		});
+
+		// Funcionalidad para seleccionar talla
+		const sizeOptions = document.querySelectorAll('.size-option');
+		sizeOptions.forEach(option => {
+			option.addEventListener('click', function(this: HTMLElement) {
+				sizeOptions.forEach(o => o.classList.remove('selected'));
+				this.classList.add('selected');
+			});
+		});
+
+		// Funcionalidad para seleccionar color
+		const colorOptions = document.querySelectorAll('.color-option');
+		colorOptions.forEach(option => {
+			option.addEventListener('click', function(this: HTMLElement) {
+				colorOptions.forEach(o => o.classList.remove('selected'));
+				this.classList.add('selected');
+			});
+		});
+	});
+</script>

@@ -46,22 +46,24 @@ const categories = [...new Set(products.map(product => product.category))];
 		<div class="products-grid">
 			{featuredProducts.map(product => (
 				<div class="product-card">
-					<div class="product-image">
-						<img src={product.image} alt={product.name} />
-						{!product.inStock && <div class="out-of-stock-overlay">Agotado</div>}
-					</div>
-					<div class="product-info">
-						<h3 class="product-name">{product.name}</h3>
-						<p class="product-category">{product.category}</p>
-						<div class="product-price">
-							<span class="price">${product.price.toLocaleString()}</span>
-							{product.inStock && <span class="stock-badge in-stock">En stock</span>}
-							{!product.inStock && <span class="stock-badge out-of-stock">Agotado</span>}
+					<a href={`/producto/${product.id}`} class="product-link">
+						<div class="product-image">
+							<img src={product.image} alt={product.name} />
+							{!product.inStock && <div class="out-of-stock-overlay">Agotado</div>}
 						</div>
-						<button class="add-to-cart-btn" disabled={!product.inStock}>
-							{product.inStock ? 'Agregar al carrito' : 'No disponible'}
-						</button>
-					</div>
+						<div class="product-info">
+							<h3 class="product-name">{product.name}</h3>
+							<p class="product-category">{product.category}</p>
+							<div class="product-price">
+								<span class="price">${product.price.toLocaleString()}</span>
+								{product.inStock && <span class="stock-badge in-stock">En stock</span>}
+								{!product.inStock && <span class="stock-badge out-of-stock">Agotado</span>}
+							</div>
+						</div>
+					</a>
+					<button class="add-to-cart-btn" disabled={!product.inStock}>
+						{product.inStock ? 'Agregar al carrito' : 'No disponible'}
+					</button>
 				</div>
 			))}
 		</div>
@@ -246,12 +248,27 @@ const categories = [...new Set(products.map(product => product.category))];
 		border-radius: 12px;
 		overflow: hidden;
 		transition: all 0.2s ease;
+		display: flex;
+		flex-direction: column;
 	}
 	
 	.product-card:hover {
 		transform: translateY(-4px);
 		box-shadow: var(--shadow-md);
 		border-color: var(--primary-color);
+	}
+	
+	.product-link {
+		text-decoration: none;
+		color: inherit;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+	
+	.product-link:hover {
+		text-decoration: none;
+		color: inherit;
 	}
 	
 	.product-image {
