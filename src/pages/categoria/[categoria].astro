@@ -1,24 +1,47 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { getFilteredProducts, getAllCategories, getCategoryStats } from '../data/products';
+import Layout from '../../layouts/Layout.astro';
+import { products, getAllCategories } from '../../data/products';
+
+// Función para generar las rutas estáticas
+export function getStaticPaths() {
+  const categories = getAllCategories();
+  return categories.map(categoria => ({
+    params: { categoria: categoria.toLowerCase() }
+  }));
+}
+
+// Obtener el parámetro de la categoría de la URL
+const { categoria } = Astro.params;
 
 // Obtener parámetros de la URL para filtros y paginación
 const url = new URL(Astro.request.url);
 const page = parseInt(url.searchParams.get('page') || '1');
-const category = url.searchParams.get('category') || '';
 const priceMin = parseInt(url.searchParams.get('priceMin') || '0');
 const priceMax = parseInt(url.searchParams.get('priceMax') || '10000');
 const inStock = url.searchParams.get('inStock') === 'true';
 const searchQuery = url.searchParams.get('search') || '';
 
-// Usar la función helper para filtrar productos
-const filteredProducts = getFilteredProducts({
-  category: category || undefined,
-  search: searchQuery || undefined,
-  priceMin: priceMin > 0 ? priceMin : undefined,
-  priceMax: priceMax < 10000 ? priceMax : undefined,
-  inStock: inStock || undefined
-});
+// Filtrar productos por categoría
+let filteredProducts = products.filter(product => 
+  product.category.toLowerCase() === categoria?.toLowerCase()
+);
+
+// Filtro por búsqueda
+if (searchQuery) {
+  filteredProducts = filteredProducts.filter(product => 
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+}
+
+if (priceMin > 0 || priceMax < 10000) {
+  filteredProducts = filteredProducts.filter(product => 
+    product.price >= priceMin && product.price <= priceMax
+  );
+}
+
+if (inStock) {
+  filteredProducts = filteredProducts.filter(product => product.inStock);
+}
 
 // Paginación
 const productsPerPage = 8;
@@ -26,21 +49,30 @@ const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 const startIndex = (page - 1) * productsPerPage;
 const paginatedProducts = filteredProducts.slice(startIndex, startIndex + productsPerPage);
 
-// Obtener categorías y estadísticas
-const categories = getAllCategories();
-const categoryStats = getCategoryStats();
-const maxPrice = Math.max(...getAllCategories().map(cat => 
-  getFilteredProducts({ category: cat }).reduce((max, p) => Math.max(max, p.price), 0)
-));
+// Obtener todas las categorías para navegación
+const allCategories = [...new Set(products.map(product => product.category))];
+const maxPrice = Math.max(...products.map(product => product.price));
+
+// Función para capitalizar la primera letra
+function capitalizeFirst(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 ---
 
-<Layout title="Catálogo de Productos - Store Demo">
-	<div class="catalog-header">
-		<h1 class="catalog-title">Catálogo de Productos</h1>
-		<p class="catalog-subtitle">Descubre nuestra colección de productos de moda</p>
+<Layout title={`${capitalizeFirst(categoria || '')} - Store Demo`}>
+	<div class="category-header">
+		<div class="breadcrumb">
+			<a href="/">Inicio</a>
+			<span class="breadcrumb-separator">›</span>
+			<a href="/catalogo">Catálogo</a>
+			<span class="breadcrumb-separator">›</span>
+			<span class="breadcrumb-current">{capitalizeFirst(categoria || '')}</span>
+		</div>
+		<h1 class="category-title">{capitalizeFirst(categoria || '')}</h1>
+		<p class="category-subtitle">{filteredProducts.length} productos encontrados</p>
 	</div>
 
-	<div class="catalog-content">
+	<div class="category-content">
 		<aside class="filters-sidebar">
 			<div class="filters-header">
 				<h3>Filtros</h3>
@@ -48,38 +80,13 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 			</div>
 			
 			<div class="filter-group">
-				<h4>Categoría</h4>
+				<h4>Categorías</h4>
 				<div class="filter-options">
-					{categories.map(cat => {
-						const stats = categoryStats.find(s => s.name === cat);
-						return (
-							<label class="filter-option">
-								<input 
-									type="radio" 
-									name="category" 
-									value={cat}
-									checked={category === cat}
-									onchange="applyFilters()"
-								/>
-								<span class="category-name">{cat}</span>
-								<span class="category-count">({stats?.count || 0})</span>
-							</label>
-						);
-					})}
-					<label class="filter-option">
-						<input 
-							type="radio" 
-							name="category" 
-							value=""
-							checked={!category}
-							onchange="applyFilters()"
-						/>
-						<span class="category-name">Todas</span>
-						<span class="category-count">({categories.reduce((sum, cat) => {
-							const stats = categoryStats.find(s => s.name === cat);
-							return sum + (stats?.count || 0);
-						}, 0)})</span>
-					</label>
+					{allCategories.map(cat => (
+						<a href={`/categoria/${cat.toLowerCase()}`} class={`filter-option-link ${cat.toLowerCase() === categoria?.toLowerCase() ? 'active' : ''}`}>
+							{cat}
+						</a>
+					))}
 				</div>
 			</div>
 
@@ -117,14 +124,13 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 
 		<main class="products-section">
 			<div class="products-header">
-				<!-- Fila principal: Búsqueda, Resultados y Ordenamiento -->
 				<div class="main-controls">
 					<div class="search-group">
 						<div class="search-input-wrapper">
 							<input 
 								type="text" 
 								id="searchInput" 
-								placeholder="Buscar por nombre o categoría..."
+								placeholder="Buscar productos..."
 								value={searchQuery}
 								oninput="handleSearch()"
 								class="search-input"
@@ -147,7 +153,6 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 							<option value="name">Ordenar por nombre</option>
 							<option value="price-low">Precio: menor a mayor</option>
 							<option value="price-high">Precio: mayor a menor</option>
-							<option value="category">Categoría</option>
 						</select>
 					</div>
 				</div>
@@ -219,7 +224,7 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 </Layout>
 
 <style>
-	.catalog-header {
+	.category-header {
 		text-align: center;
 		margin-bottom: 3rem;
 		padding: 2rem 0;
@@ -227,7 +232,36 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 		border-radius: 12px;
 	}
 	
-	.catalog-title {
+	.breadcrumb {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		margin-bottom: 1rem;
+		font-size: 0.9rem;
+		color: var(--text-light);
+	}
+	
+	.breadcrumb a {
+		color: var(--primary-color);
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+	
+	.breadcrumb a:hover {
+		color: var(--primary-hover);
+	}
+	
+	.breadcrumb-separator {
+		color: var(--text-muted);
+	}
+	
+	.breadcrumb-current {
+		color: var(--text-color);
+		font-weight: 500;
+	}
+	
+	.category-title {
 		font-size: 2.5rem;
 		font-weight: 800;
 		margin: 0 0 0.5rem 0;
@@ -235,13 +269,13 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 		letter-spacing: -0.025em;
 	}
 	
-	.catalog-subtitle {
+	.category-subtitle {
 		color: var(--text-light);
 		font-size: 1.1rem;
 		margin: 0;
 	}
 	
-	.catalog-content {
+	.category-content {
 		display: grid;
 		grid-template-columns: 280px 1fr;
 		gap: 3rem;
@@ -257,65 +291,6 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 		height: fit-content;
 		position: sticky;
 		top: 100px;
-	}
-	
-	.search-section {
-		margin-bottom: 2rem;
-		padding-bottom: 2rem;
-		border-bottom: 1px solid var(--border-color);
-	}
-	
-	.search-section h3 {
-		font-size: 1.25rem;
-		font-weight: 700;
-		margin: 0 0 1rem 0;
-		color: var(--text-color);
-	}
-	
-	.search-input-container {
-		position: relative;
-		display: flex;
-		align-items: center;
-	}
-	
-	.search-input {
-		width: 100%;
-		padding: 0.75rem 3rem 0.75rem 1rem;
-		border: 1px solid var(--border-color);
-		border-radius: 8px;
-		font-size: 0.9rem;
-		background: var(--background-color);
-		color: var(--text-color);
-		transition: all 0.2s ease;
-	}
-	
-	.search-input:focus {
-		outline: none;
-		border-color: var(--primary-color);
-		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-	}
-	
-	.search-btn {
-		position: absolute;
-		right: 0.5rem;
-		top: 50%;
-		transform: translateY(-50%);
-		width: 32px;
-		height: 32px;
-		background: var(--primary-color);
-		border: none;
-		border-radius: 6px;
-		color: white;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		transition: all 0.2s ease;
-	}
-	
-	.search-btn:hover {
-		background: var(--primary-hover);
-		transform: translateY(-50%) scale(1.05);
 	}
 	
 	.filters-header {
@@ -365,6 +340,28 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 		gap: 0.75rem;
 	}
 	
+	.filter-option-link {
+		display: block;
+		padding: 0.5rem 0.75rem;
+		text-decoration: none;
+		color: var(--text-light);
+		font-size: 0.9rem;
+		border-radius: 6px;
+		transition: all 0.2s ease;
+		border: 1px solid transparent;
+	}
+	
+	.filter-option-link:hover {
+		color: var(--text-color);
+		background: var(--background-light);
+	}
+	
+	.filter-option-link.active {
+		background: var(--primary-color);
+		color: white;
+		border-color: var(--primary-color);
+	}
+	
 	.filter-option {
 		display: flex;
 		align-items: center;
@@ -373,24 +370,12 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 		font-size: 0.9rem;
 		color: var(--text-light);
 		transition: color 0.2s ease;
-		justify-content: space-between;
 	}
 	
 	.filter-option:hover {
 		color: var(--text-color);
 	}
 	
-	.category-name {
-		flex: 1;
-	}
-	
-	.category-count {
-		font-size: 0.8rem;
-		color: var(--text-muted);
-		font-weight: 500;
-	}
-	
-	.filter-option input[type="radio"],
 	.filter-option input[type="checkbox"] {
 		width: 16px;
 		height: 16px;
@@ -503,10 +488,6 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 		background: var(--primary-hover);
 	}
 	
-	.search-btn:active {
-		transform: scale(0.95);
-	}
-	
 	.results-info {
 		display: flex;
 		align-items: center;
@@ -542,7 +523,6 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 	}
 	
-	
 	.products-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -572,11 +552,6 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-	}
-	
-	.product-link:hover {
-		text-decoration: none;
-		color: inherit;
 	}
 	
 	.product-image {
@@ -774,7 +749,7 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 	
 	/* Responsive */
 	@media (max-width: 1024px) {
-		.catalog-content {
+		.category-content {
 			grid-template-columns: 1fr;
 			gap: 2rem;
 		}
@@ -790,7 +765,7 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 	}
 	
 	@media (max-width: 768px) {
-		.catalog-title {
+		.category-title {
 			font-size: 2rem;
 		}
 		
@@ -871,12 +846,10 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 		}
 		params.delete('page'); // Reset a página 1 al buscar
 		
-		window.location.href = `/catalogo?${params.toString()}`;
+		window.location.href = `${window.location.pathname}?${params.toString()}`;
 	}
 	
 	function applyFilters() {
-		const categoryElement = document.querySelector('input[name="category"]:checked') as HTMLInputElement;
-		const category = categoryElement?.value || '';
 		const priceRangeElement = document.getElementById('priceRange') as HTMLInputElement;
 		const priceMax = priceRangeElement?.value || '10000';
 		const inStockElement = document.querySelector('input[name="inStock"]') as HTMLInputElement;
@@ -886,15 +859,14 @@ const maxPrice = Math.max(...getAllCategories().map(cat =>
 		
 		const params = new URLSearchParams();
 		if (searchQuery.trim()) params.set('search', searchQuery.trim());
-		if (category) params.set('category', category);
 		if (parseInt(priceMax) < 10000) params.set('priceMax', priceMax);
 		if (inStock) params.set('inStock', 'true');
 		
-		window.location.href = `/catalogo?${params.toString()}`;
+		window.location.href = `${window.location.pathname}?${params.toString()}`;
 	}
 	
 	function clearAllFilters() {
-		window.location.href = '/catalogo';
+		window.location.href = window.location.pathname;
 	}
 	
 	function updatePriceDisplay() {
