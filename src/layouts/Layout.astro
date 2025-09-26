@@ -17,6 +17,7 @@ const { title = "Store Demo" } = Astro.props;
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="/src/styles/globals.css">
 	</head>
 	<body>
 		<header class="header">
@@ -108,16 +109,16 @@ const { title = "Store Demo" } = Astro.props;
 
 <style>
 	:root {
-		--primary-color: #2563eb;
-		--primary-hover: #1d4ed8;
-		--text-color: #111827;
-		--text-light: #6b7280;
-		--text-muted: #9ca3af;
-		--border-color: #e5e7eb;
-		--background-color: #ffffff;
-		--background-light: #f8fafc;
-		--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-		--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+		--primary-color: hsl(var(--accent-600));
+		--primary-hover: hsl(var(--accent-700));
+		--text-color: hsl(var(--neutral-800));
+		--text-light: hsl(var(--neutral-600));
+		--text-muted: hsl(var(--neutral-500));
+		--border-color: hsl(var(--neutral-200));
+		--background-color: hsl(var(--neutral-50));
+		--background-light: hsl(var(--neutral-100));
+		--shadow-sm: 0 1px 2px 0 hsl(var(--neutral-200) / 0.4);
+		--shadow-md: 0 4px 6px -1px hsl(var(--neutral-200) / 0.4), 0 2px 4px -2px hsl(var(--neutral-200) / 0.4);
 	}
 	
 	* {
